@@ -25,7 +25,7 @@
         </div>
         <ul class="nav-links">
             <li><a href="{{ route('index') }}" class="active">Beranda</a></li>
-            <li><a href="{{ route('katalog') }}">Katalog</a></li>
+            <li><a href="{{ route('katalogqaz') }}">Katalog</a></li>
             <li><a href="#">Tentang</a></li>
             <li><a href="#" class="btn-signin" style="color: white">Sign In</a></li>
         </ul>

@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        if (auth()->user()->isAdmin()) {
+        if (auth()->guard('web')->user()->isAdmin()) {
             return redirect()->route('admin.dashboard');
         }
         return redirect()->route('student.dashboard');
