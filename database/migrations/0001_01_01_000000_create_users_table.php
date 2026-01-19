@@ -6,14 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+        /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->integer('access_type')->comment('1=Admin, 2=Siswa');
+            $table->integer('access_type')->enum('Admin', 'Student');
             $table->string('name');
             $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();

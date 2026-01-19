@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'access_type',
     ];
 
     /**
@@ -44,5 +45,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->access_type === 'Admin' || $this->access_type === 1; // Supporting both string and potential integer mapping
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->access_type === 'Student' || $this->access_type === 2;
     }
 }
