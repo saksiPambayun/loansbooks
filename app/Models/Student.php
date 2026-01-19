@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\LoansController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

@@ -27,7 +27,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'access_type' => 'required|in:1,2',
+            'access_type' => 'required|in:Admin,Student',
         ]);
 
         $user = User::create([
@@ -64,7 +64,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8|confirmed',
-            'access_type' => 'required|in:1,2',
+            'access_type' => 'required|in:Admin,Student',
         ]);
 
         $user->update([

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\LoanstatusController;
+use App\Models\LoanStatus;
+use App\Models\Book;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Model;
 
 class Loan extends Model
@@ -25,22 +27,22 @@ class Loan extends Model
 
     // Relationships
     public function student()
-{
-    return $this->belongsTo(Student::class, 'student_id');
-}
+    {
+        return $this->belongsTo(Student::class, 'student_id');
+    }
 
     public function book()
-{
-    return $this->belongsTo(Book::class, 'book_id');
-}
+    {
+        return $this->belongsTo(Book::class, 'book_id');
+    }
 
     public function statuses()
     {
-        return $this->hasMany(Loan::class, 'loan_id');
+        return $this->hasMany(LoanStatus::class, 'loan_id');
     }
 
     public function latestStatus()
     {
-        return $this->hasOne(Loan::class, 'loan_id')->latestOfMany();
+        return $this->hasOne(LoanStatus::class, 'loan_id')->latestOfMany();
     }
 }

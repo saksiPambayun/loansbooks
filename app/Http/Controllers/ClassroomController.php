@@ -11,12 +11,12 @@ class ClassroomController extends Controller
     public function index()
     {
         $classrooms = Classroom::whereNull('deleted_at')->paginate(10);
-        return view('classrooms.index', compact('classrooms'));
+        return view('admin.classrooms.index', compact('classrooms'));
     }
 
     public function create()
     {
-        return view('classrooms.create');
+        return view('admin.classrooms.create');
     }
 
     public function store(Request $request)
@@ -30,7 +30,7 @@ class ClassroomController extends Controller
             'created_by' => Auth::id() ?? 0,
         ]);
 
-        return redirect()->route('classrooms.index')
+        return redirect()->route('admin.classrooms.index')
             ->with('success', 'Kelas berhasil ditambahkan');
     }
 
@@ -40,7 +40,7 @@ class ClassroomController extends Controller
             abort(404);
         }
         $classroom->load('students.user');
-        return view('classrooms.show', compact('classroom'));
+        return view('admin.classrooms.show', compact('classroom'));
     }
 
     public function edit(Classroom $classroom)
@@ -48,7 +48,7 @@ class ClassroomController extends Controller
         if ($classroom->deleted_at) {
             abort(404);
         }
-        return view('classrooms.edit', compact('classroom'));
+        return view('admin.classrooms.edit', compact('classroom'));
     }
 
     public function update(Request $request, Classroom $classroom)
