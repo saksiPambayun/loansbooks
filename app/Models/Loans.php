@@ -25,22 +25,22 @@ class Loan extends Model
 
     // Relationships
     public function student()
-    {
-        return $this->belongsTo(Student::class);
-    }
+{
+    return $this->belongsTo(Student::class, 'student_id');
+}
 
     public function book()
-    {
-        return $this->belongsTo(Book::class);
-    }
+{
+    return $this->belongsTo(Book::class, 'book_id');
+}
 
     public function statuses()
     {
-        return $this->hasMany(LoanstatusController::class, 'loan_id');
+        return $this->hasMany(Loan::class, 'loan_id');
     }
 
     public function latestStatus()
     {
-        return $this->hasOne(LoanstatusController::class, 'loan_id')->latestOfMany();
+        return $this->hasOne(Loan::class, 'loan_id')->latestOfMany();
     }
 }

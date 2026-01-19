@@ -30,9 +30,17 @@ class Book extends Model
         'deleted_at' => 'datetime',
     ];
 
+$book = Book::find($validated['book_id']);
+$book->decrement('stock');
+
+// Cara 2: Di parameter (jika dalam method)
+public function someMethod(Book $book)
+{
+    $book->decrement('stock');
+}
     // Relationships
     public function loans()
     {
-        return $this->hasMany(LoansController::class, 'book_id');
+        return $this->hasMany(Loan::class, 'book_id');
     }
 }
