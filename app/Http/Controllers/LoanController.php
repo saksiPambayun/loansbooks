@@ -59,10 +59,12 @@ class LoanController extends Controller
         DB::beginTransaction();
         try {
             $book = Book::find($validated['book_id']);
+            
             if ($book->stock <= 0) {
                 return back()->withInput()->with('error', 'Stok buku tidak tersedia');
             }
 
+            // 1. Buat data peminjaman
             $loan = Loan::create([
                 'student_id' => $validated['student_id'],
                 'book_id' => $validated['book_id'],
@@ -71,21 +73,25 @@ class LoanController extends Controller
                 'created_by' => Auth::id() ?? 0,
             ]);
 
+            // 2. Buat status awal
             LoanStatus::create([
                 'loan_id' => $loan->id,
                 'status' => 'pending',
             ]);
 
-            $book->decrement('stock');
-
+            // 3. Kurangi stok buku
+       
             DB::commit();
+            
             return redirect()->route('admin.loans.index')
                 ->with('success', 'Peminjaman berhasil dibuat');
+
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->with('error', 'Gagal membuat peminjaman: ' . $e->getMessage());
         }
     }
+    
 
     public function studentStore(Request $request)
     {
@@ -122,11 +128,11 @@ class LoanController extends Controller
                 'status' => 'pending',
             ]);
 
-            // Stok tidak langsung dikurangi saat request? 
-            // Biasanya dikurangi saat disetujui (approved) atau saat request (pending).
-            // Berdasarkan store() admin tadi, stok dikurangi saat request. Kita ikuti saja.
-            $book->decrement('stock');
+            $book = Book::find($validated['book_id']);
 
+            if ($book->stock <= 0) {
+            return back()->with('error', 'Stok buku tidak tersedia');
+           }
             DB::commit();
             return redirect()->route('student.loans.index')
                 ->with('success', 'Permintaan peminjaman berhasil diajukan');
