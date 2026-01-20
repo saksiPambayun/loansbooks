@@ -11,10 +11,10 @@ class LoanStatusesController extends Controller
     public function index($loanId)
     {
         $loan = Loan::with(['student.user', 'book'])->findOrFail($loanId);
-        $statuses = LoanStatus::wheree('loan_id', $loanId)
+        $statuses = LoanStatus::where('loan_id', $loanId)
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return view('loan-statuses.index', compact('loan', 'statuses'));
     }
 

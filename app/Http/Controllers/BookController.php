@@ -12,7 +12,23 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::whereNull('deleted_at')->paginate(10);
-        return view('books.index', compact('books'));
+        return view('admin.books.index', compact('books'));
+    }
+
+    public function katalog(Request $request)
+    {
+        $query = Book::whereNull('deleted_at');
+
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('category') && $request->category != 'Semua') {
+            $query->where('category', $request->category);
+        }
+
+        $books = $query->paginate(12);
+        return view('katalog', compact('books'));
     }
 
     public function create()

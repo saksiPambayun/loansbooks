@@ -24,7 +24,11 @@
             <li><a href="{{ route('index') }}">Beranda</a></li>
             <li><a href="{{ route('katalog') }}" class="active">Katalog</a></li>
             <li><a href="#">Tentang</a></li>
-            <li><a href="#" class="btn-signin">Sign In</a></li>
+            @auth
+                <li><a href="{{ route('dashboard') }}" class="btn-signin">{{ Auth::user()->name }}</a></li>
+            @else
+                <li><a href="{{ route('login') }}" class="btn-signin">Sign In</a></li>
+            @endauth
         </ul>
     </nav>
 
@@ -38,42 +42,130 @@
 
     <!-- Search & Filter Section -->
     <section class="max-w-4xl mx-auto px-4 mb-16">
-        <div class="bg-white p-4 rounded-xl shadow-sm flex flex-col md:flex-row gap-4 border border-slate-100">
-            <input type="text" id="searchInput" placeholder="Cari..."
+        <form action="{{ route('katalog') }}" method="GET"
+            class="bg-white p-4 rounded-xl shadow-sm flex flex-col md:flex-row gap-4 border border-slate-100">
+            <input type="text" name="search" id="searchInput" placeholder="Cari..." value="{{ request('search') }}"
                 class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border-slate-200" />
-            <select id="categorySelect"
+            <select name="category" id="categorySelect"
                 class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border-slate-200 bg-white">
-                <option value="Semua">Semua Kategori</option>
-                <option value="Novel">Novel</option>
-                <option value="Edukasi">Edukasi</option>
-                <option value="Fiksi">Fiksi</option>
+                <option value="Semua" {{ request('category') == 'Semua' ? 'selected' : '' }}>Semua Kategori</option>
+                <option value="Novel" {{ request('category') == 'Novel' ? 'selected' : '' }}>Novel</option>
+                <option value="Edukasi" {{ request('category') == 'Edukasi' ? 'selected' : '' }}>Edukasi</option>
+                <option value="Fiksi" {{ request('category') == 'Fiksi' ? 'selected' : '' }}>Fiksi</option>
             </select>
-            <button id="searchBtn" class="btn-purple text-white px-8 py-2 rounded-lg font-medium transition-all">
+            <button type="submit" id="searchBtn"
+                class="btn-purple text-white px-8 py-2 rounded-lg font-medium transition-all">
                 Cari Buku
             </button>
-        </div>
+        </form>
     </section>
 
-    <!-- Book Grid Section -->
     <main class="max-w-6xl mx-auto px-6 mb-20">
         <div id="bookGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Books will be rendered here by JavaScript -->
+            @forelse($books as $book)
+                <div class="book-card" data-category="{{ $book->category }}">
+                    <div class="book-image-container">
+                        <img src="{{ $book->cover ? asset('storage/' . $book->cover) : 'https://via.placeholder.com/280x320?text=' . urlencode($book->title) }}"
+                            alt="{{ $book->title }}" class="book-image">
+                        <div class="book-tag">{{ $book->category }}</div>
+                    </div>
+                    <div class="book-content-row">
+                        <div class="book-text-col">
+                            <h3 class="book-title">{{ $book->title }}</h3>
+                            <p class="book-desc">{{ Str::limit($book->author ?? 'Tanpa Penulis', 30) }}</p>
+                            <p class="text-sm font-bold text-purple-600 mt-2">Stok: {{ $book->stock }}</p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <button onclick="openBorrowModal({{ $book->id }}, '{{ addslashes($book->title) }}')"
+                                class="btn-arrow" title="Pinjam Buku">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div id="noResults" class="col-span-full text-center py-12">
+                    <p class="text-slate-500 text-lg">Tidak ada buku ditemukan</p>
+                    <a href="{{ route('katalog') }}" class="mt-4 btn-purple text-white px-6 py-2 rounded-lg inline-block">
+                        Reset Pencarian
+                    </a>
+                </div>
+            @endforelse
         </div>
 
-        <!-- No Results Message -->
-        <div id="noResults" class="hidden text-center py-12">
-            <p class="text-slate-500 text-lg">Tidak ada buku ditemukan</p>
-            <button id="resetBtn" class="mt-4 btn-purple text-white px-6 py-2 rounded-lg">
-                Reset Pencarian
-            </button>
+        <div class="mt-8">
+            {{ $books->links() }}
         </div>
     </main>
+
+    <!-- Borrow Modal -->
+    <div id="borrowModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+        style="display: none;">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Pinjam Buku</h2>
+            <p id="modalBookTitle" class="text-purple-600 font-medium mb-6"></p>
+
+            <form action="{{ route('student.loans.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="book_id" id="modalBookId">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Durasi Pinjam (Hari)</label>
+                    <select name="duration"
+                        class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-slate-50">
+                        <option value="3">3 Hari</option>
+                        <option value="7" selected>7 Hari (1 Minggu)</option>
+                        <option value="14">14 Hari (2 Minggu)</option>
+                    </select>
+                    <p class="text-xs text-slate-500 mt-2">* Maksimal peminjaman adalah 14 hari.</p>
+                </div>
+
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeBorrowModal()"
+                        class="flex-1 px-6 py-3 border border-slate-200 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-all">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-6 py-3 btn-purple text-white rounded-xl font-medium shadow-lg shadow-purple-200 hover:shadow-purple-300 transition-all">
+                        Konfirmasi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
         <p>All Rights Reserved • Copyright LoansBooks by SaksiPambayun 2026</p>
     </footer>
 
+    <script>
+        function openBorrowModal(id, title) {
+            @if(Auth::check())
+                document.getElementById('modalBookId').value = id;
+                document.getElementById('modalBookTitle').textContent = title;
+                document.getElementById('borrowModal').style.display = 'flex';
+            @else
+                window.location.href = "{{ route('login') }}";
+            @endif
+        }
+
+        function closeBorrowModal() {
+            document.getElementById('borrowModal').style.display = 'none';
+        }
+
+        // Close modal on outside click
+        window.onclick = function (event) {
+            const modal = document.getElementById('borrowModal');
+            if (event.target == modal) {
+                closeBorrowModal();
+            }
+        }
+    </script>
     <script src="{{ asset('assets/katalog.js') }}"></script>
 </body>
 

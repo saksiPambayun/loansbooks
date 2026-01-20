@@ -30,14 +30,7 @@ class Book extends Model
         'deleted_at' => 'datetime',
     ];
 
-
-// Cara 2: Di parameter (jika dalam method)
-public function someMethod(Book $book)
-{
-    $book->decrement('stock');
-}
-    // Relationships
-    public function loans()
+public function loans()
     {
         return $this->hasMany(Loan::class, 'book_id');
     }

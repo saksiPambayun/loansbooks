@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\StudentController;
+use App\Models\Student;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = [
         'access_type',
@@ -33,6 +34,16 @@ class User extends Authenticatable
     // Relationships
     public function student()
     {
-        return $this->hasOne(StudentController::class, 'user_id');
+        return $this->hasOne(Student::class, 'user_id');
+    }
+
+    public function isAdmin()
+    {
+        return $this->access_type === 'Admin';
+    }
+
+    public function isStudent()
+    {
+        return $this->access_type === 'Student';
     }
 }

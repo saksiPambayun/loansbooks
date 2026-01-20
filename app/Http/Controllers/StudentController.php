@@ -17,13 +17,13 @@ class StudentController extends Controller
         $students = Student::with(['user', 'classroom'])
             ->whereNull('deleted_at')
             ->paginate(10);
-        return view('students.index', compact('students'));
+        return view('admin.students.index', compact('students'));
     }
 
     public function create()
     {
         $classrooms = Classroom::whereNull('deleted_at')->get();
-        return view('students.create', compact('classrooms'));
+        return view('admin.students.create', compact('classrooms'));
     }
 
     public function store(Request $request)
@@ -71,7 +71,7 @@ class StudentController extends Controller
             abort(404);
         }
         $student->load(['user', 'classroom', 'loans.book']);
-        return view('students.show', compact('student'));
+        return view('admin.students.show', compact('student'));
     }
 
     public function edit(Student $student)
@@ -81,7 +81,7 @@ class StudentController extends Controller
         }
         $classrooms = Classroom::whereNull('deleted_at')->get();
         $student->load('user');
-        return view('students.edit', compact('student', 'classrooms'));
+        return view('admin.students.edit', compact('student', 'classrooms'));
     }
 
     public function update(Request $request, Student $student)
