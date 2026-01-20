@@ -73,7 +73,8 @@
 
                                 <dt class="text-sm font-medium text-gray-500">Kelas</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">
-                                    {{ $loan->student->classroom->name ?? '-' }}</dd>
+                                    {{ $loan->student->classroom->name ?? '-' }}
+                                </dd>
                             </dl>
                         </div>
 
@@ -129,7 +130,8 @@
                                 <div>
                                     <p class="text-xs text-gray-500 uppercase tracking-wider">Dibuat Oleh</p>
                                     <p class="text-sm font-bold text-gray-600">
-                                        {{ $loan->created_by == 0 ? 'Sistem' : 'Administrator' }}</p>
+                                        {{ $loan->created_by == 0 ? 'Sistem' : 'Administrator' }}
+                                    </p>
                                 </div>
                             </div>
                         </div>

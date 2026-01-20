@@ -97,7 +97,8 @@
 
                                         {{-- KOLOM 6: TAHUN TERBIT --}}
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            {{ $book->publication_year }}</td>
+                                            {{ $book->publication_year }}
+                                        </td>
 
                                         {{-- KOLOM 7: STOK --}}
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $book->stock }}

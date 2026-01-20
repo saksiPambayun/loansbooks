@@ -41,7 +41,8 @@
         <div class="detail-card">
             <!-- Book Image -->
             <div class="book-image-section">
-                <img src="{{ $book->cover ? asset('storage/' . $book->cover) : 'https://via.placeholder.com/280x320?text=' . urlencode($book->title) }}" alt="{{ $book->title }}" class="book-cover" />
+                <img src="{{ $book->cover ? asset('storage/' . $book->cover) : 'https://via.placeholder.com/280x320?text=' . urlencode($book->title) }}"
+                    alt="{{ $book->title }}" class="book-cover" />
             </div>
 
             <!-- Book Info -->
@@ -77,20 +78,20 @@
                 </div>
 
                 @if($book->stock > 0)
-                <form action="{{ route('student.loans.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="book_id" value="{{ $book->id }}">
-                    <button type="submit" class="borrow-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        Pinjam Buku
-                    </button>
-                </form>
+                    <form action="{{ route('student.loans.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="book_id" value="{{ $book->id }}">
+                        <button type="submit" class="borrow-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Pinjam Buku
+                        </button>
+                    </form>
                 @else
-                <button class="borrow-btn bg-gray-400 cursor-not-allowed" disabled>Stok Habis</button>
+                    <button class="borrow-btn bg-gray-400 cursor-not-allowed" disabled>Stok Habis</button>
                 @endif
             </div>
         </div>
