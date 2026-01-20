@@ -9,7 +9,6 @@
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
             <img src="image/logo.png" alt="LoansBooks" />
@@ -27,7 +26,6 @@
         </ul>
     </nav>
 
-    <!-- Back Button -->
     <div class="main-wrapper">
         <div class="back-section">
             <a href="{{ route('katalog') }}" class="back-btn">Kembali</a>
@@ -36,16 +34,13 @@
         <div class="detail-container"></div>
     </div>
 
-    <!-- Detail Book Section -->
     <main class="detail-container">
         <div class="detail-card">
-            <!-- Book Image -->
             <div class="book-image-section">
                 <img src="{{ $book->cover ? asset('storage/' . $book->cover) : 'https://via.placeholder.com/280x320?text=' . urlencode($book->title) }}"
                     alt="{{ $book->title }}" class="book-cover" />
             </div>
 
-            <!-- Book Info -->
             <div class="book-info-section">
                 <h1 class="book-title">{{ $book->title }}</h1>
 
@@ -97,7 +92,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>All Rights Reserved • Copyright LoansBooks by SaksiPembayun 2025</p>
     </footer>

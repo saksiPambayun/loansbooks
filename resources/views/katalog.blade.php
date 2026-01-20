@@ -10,7 +10,6 @@
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
             <img src="image/logo.png" alt="LoansBooks Logo" />
@@ -32,7 +31,6 @@
         </ul>
     </nav>
 
-    <!-- Header Section -->
     <header class="text-center mt-16 mb-10">
         <h1 class="text-4xl font-bold text-slate-900 mb-2">Katalog Buku</h1>
         <p class="text-slate-500">
@@ -40,7 +38,6 @@
         </p>
     </header>
 
-    <!-- Search & Filter Section -->
     <section class="max-w-4xl mx-auto px-4 mb-16">
         <form action="{{ route('katalog') }}" method="GET"
             class="bg-white p-4 rounded-xl shadow-sm flex flex-col md:flex-row gap-4 border border-slate-100">
@@ -109,7 +106,6 @@
         </div>
     </main>
 
-    <!-- Borrow Modal -->
     <div id="borrowModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
         style="display: none;">
         <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl">
@@ -144,7 +140,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>All Rights Reserved • Copyright LoansBooks by SaksiPambayun 2026</p>
     </footer>
@@ -164,7 +159,6 @@
             document.getElementById('borrowModal').style.display = 'none';
         }
 
-        // Close modal on outside click
         window.onclick = function (event) {
             const modal = document.getElementById('borrowModal');
             if (event.target == modal) {
