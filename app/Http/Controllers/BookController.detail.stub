@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Book;
+use Illuminate\Http\Request;
+
+class BookController extends Controller
+{
+    // ...existing code...
+
+    public function detail($id)
+    {
+        $book = Book::where('id', $id)->whereNull('deleted_at')->firstOrFail();
+        return view('detail', compact('book'));
+    }
+}

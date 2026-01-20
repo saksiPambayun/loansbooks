@@ -11,13 +11,13 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::whereNull('deleted_at')->paginate(10);
+        $books = Book::paginate(10); // SoftDeletes otomatis exclude yang terhapus
         return view('admin.books.index', compact('books'));
     }
 
     public function katalog(Request $request)
     {
-        $query = Book::whereNull('deleted_at');
+        $query = Book::query();
 
         if ($request->has('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
@@ -107,17 +107,16 @@ class BookController extends Controller
             $coverPath = $request->file('cover')->store('book-covers', 'public');
         }
 
-        $book->update([
-            'title' => $validated['title'],
-            'author' => $validated['author'],
-            'publisher' => $validated['publisher'],
-            'publication_year' => $validated['publication_year'],
-            'isbn' => $validated['isbn'] ?? null,
-            'category' => $validated['category'],
-            'stock' => $validated['stock'],
-            'cover' => $coverPath,
-            'updated_by' => Auth::id(),
-        ]);
+        $book->title = $validated['title'];
+        $book->author = $validated['author'];
+        $book->publisher = $validated['publisher'];
+        $book->publication_year = $validated['publication_year'];
+        $book->isbn = $validated['isbn'] ?? null;
+        $book->category = $validated['category'];
+        $book->stock = $validated['stock'];
+        $book->cover = $coverPath;
+        $book->updated_by = Auth::id();
+        $book->save();
 
         return redirect()->route('admin.books.index')
             ->with('success', 'Buku berhasil diupdate');
@@ -125,12 +124,17 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
-        $book->update([
-            'deleted_at' => now(),
-            'deleted_by' => Auth::id(),
-        ]);
+        $book->deleted_by = Auth::id();
+        $book->save();
+        $book->delete();
 
         return redirect()->route('admin.books.index')
             ->with('success', 'Buku berhasil dihapus');
+    }
+    // Menampilkan detail buku untuk katalog publik
+    public function detail($id)
+    {
+        $book = Book::findOrFail($id); // SoftDeletes otomatis exclude yang terhapus
+        return view('detail', compact('book'));
     }
 }

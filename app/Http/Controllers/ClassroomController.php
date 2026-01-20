@@ -10,7 +10,7 @@ class ClassroomController extends Controller
 {
     public function index()
     {
-        $classrooms = Classroom::whereNull('deleted_at')->paginate(10);
+        $classrooms = Classroom::paginate(10); // SoftDeletes otomatis exclude yang terhapus
         return view('admin.classrooms.index', compact('classrooms'));
     }
 
@@ -62,18 +62,17 @@ class ClassroomController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->route('classrooms.index')
+        return redirect()->route('admin.classrooms.index')
             ->with('success', 'Kelas berhasil diupdate');
     }
 
     public function destroy(Classroom $classroom)
     {
-        $classroom->update([
-            'deleted_at' => now(),
-            'deleted_by' => Auth::id(),
-        ]);
+        $classroom->deleted_by = Auth::id();
+        $classroom->save();
+        $classroom->delete();
 
-        return redirect()->route('classrooms.index')
+        return redirect()->route('admin.classrooms.index')
             ->with('success', 'Kelas berhasil dihapus');
     }
 }

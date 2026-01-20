@@ -98,11 +98,15 @@
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div>
                                     <p class="text-xs text-gray-500 uppercase tracking-wider">Tanggal Pinjam</p>
-                                    <p class="text-sm font-bold">{{ $loan->start_date->format('d M Y') }}</p>
+                                    <p class="text-sm font-bold">
+                                        {{ $loan->start_date ? $loan->start_date->format('d M Y') : '-' }}
+                                    </p>
                                 </div>
                                 <div>
                                     <p class="text-xs text-gray-500 uppercase tracking-wider">Batas Kembali</p>
-                                    <p class="text-sm font-bold">{{ $loan->end_date->format('d M Y') }}</p>
+                                    <p class="text-sm font-bold">
+                                        {{ $loan->end_date ? $loan->end_date->format('d M Y') : '-' }}
+                                    </p>
                                 </div>
                                 <div>
                                     <p class="text-xs text-gray-500 uppercase tracking-wider">Status Saat Ini</p>
@@ -140,7 +144,7 @@
                                     <div class="flex-1 text-sm">
                                         <span class="font-bold text-purple-700 capitalize">{{ $history->status }}</span>
                                         <span class="text-gray-500 ml-2">pada
-                                            {{ $history->created_at->format('d M Y H:i') }}</span>
+                                            {{ $history->created_at ? $history->created_at->format('d M Y H:i') : '-' }}</span>
                                     </div>
                                 </li>
                             @endforeach

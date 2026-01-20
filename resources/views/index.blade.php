@@ -25,9 +25,13 @@
         </div>
         <ul class="nav-links">
             <li><a href="{{ route('index') }}" class="active">Beranda</a></li>
-            <li><a href="{{ route('katalogqaz') }}">Katalog</a></li>
+            <li><a href="{{ route('katalog') }}">Katalog</a></li>
             <li><a href="#">Tentang</a></li>
-            <li><a href="#" class="btn-signin" style="color: white">Sign In</a></li>
+                @auth
+                    <li><a href="{{ route('dashboard') }}" class="btn-signin" style="color: white">Dashboard</a></li>
+                @else
+                    <li><a href="{{ route('login') }}" class="btn-signin" style="color: white">Sign In</a></li>
+                @endauth
         </ul>
     </nav>
 
@@ -35,13 +39,14 @@
         <section class="hero">
             <div class="hero-content">
                 <h1>Selamat Datang di <span class="d-block">LoansBooks</span></h1>
+                    <p class="text-slate-500 mb-2">Ini adalah halaman landing page utama, bukan dashboard.</p>
                 <p>
                     “Jelajahi ratusan buku dari berbagai kategori dengan cepat dan
                     mudah.”
                 </p>
                 <div class="hero-buttons">
                     <a href="#catalog" class="btn-primary">Cari Buku</a>
-                    <a href="katalog.html" class="btn-secondary">
+                        <a href="{{ route('katalog') }}" class="btn-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path

@@ -14,9 +14,7 @@ class StudentController extends Controller
 {
     public function index()
     {
-        $students = Student::with(['user', 'classroom'])
-            ->whereNull('deleted_at')
-            ->paginate(10);
+        $students = Student::with(['user', 'classroom'])->paginate(10); // SoftDeletes otomatis exclude yang terhapus
         return view('admin.students.index', compact('students'));
     }
 
@@ -56,7 +54,7 @@ class StudentController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('students.index')
+            return redirect()->route('admin.students.index')
                 ->with('success', 'Siswa berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -115,7 +113,7 @@ class StudentController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('students.index')
+            return redirect()->route('admin.students.index')
                 ->with('success', 'Siswa berhasil diupdate');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -128,18 +126,16 @@ class StudentController extends Controller
     {
         DB::beginTransaction();
         try {
-            $student->update([
-                'deleted_at' => now(),
-                'deleted_by' => Auth::id(),
-            ]);
+            $student->deleted_by = Auth::id();
+            $student->save();
+            $student->delete();
 
-            $student->user->update([
-                'deleted_at' => now(),
-                'deleted_by' => Auth::id(),
-            ]);
+            $student->user->deleted_by = Auth::id();
+            $student->user->save();
+            $student->user->delete();
 
             DB::commit();
-            return redirect()->route('students.index')
+            return redirect()->route('admin.students.index')
                 ->with('success', 'Siswa berhasil dihapus');
         } catch (\Exception $e) {
             DB::rollBack();

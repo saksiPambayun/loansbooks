@@ -64,15 +64,21 @@
         <div id="bookGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($books as $book)
                 <div class="book-card" data-category="{{ $book->category }}">
-                    <div class="book-image-container">
-                        <img src="{{ $book->cover ? asset('storage/' . $book->cover) : 'https://via.placeholder.com/280x320?text=' . urlencode($book->title) }}"
-                            alt="{{ $book->title }}" class="book-image">
-                        <div class="book-tag">{{ $book->category }}</div>
-                    </div>
+                    <a href="{{ route('detail', $book->id) }}" class="block hover:opacity-90 transition-all">
+                        <div class="book-image-container">
+                            <img src="{{ $book->cover ? asset('storage/' . $book->cover) : 'https://via.placeholder.com/280x320?text=' . urlencode($book->title) }}"
+                                alt="{{ $book->title }}" class="book-image">
+                            <div class="book-tag">{{ $book->category }}</div>
+                        </div>
+                    </a>
                     <div class="book-content-row">
                         <div class="book-text-col">
-                            <h3 class="book-title">{{ $book->title }}</h3>
+                            <a href="{{ route('detail', $book->id) }}" class="hover:underline">
+                                <h3 class="book-title">{{ $book->title }}</h3>
+                            </a>
                             <p class="book-desc">{{ Str::limit($book->author ?? 'Tanpa Penulis', 30) }}</p>
+                            <p class="text-xs text-slate-500 mt-1">Penerbit: {{ $book->publisher ?? '-' }}</p>
+                            <p class="text-xs text-slate-500">Tahun: {{ $book->publication_year ?? '-' }}</p>
                             <p class="text-sm font-bold text-purple-600 mt-2">Stok: {{ $book->stock }}</p>
                         </div>
                         <div class="flex flex-col gap-2">

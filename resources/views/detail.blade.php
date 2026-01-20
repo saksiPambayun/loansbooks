@@ -41,59 +41,57 @@
         <div class="detail-card">
             <!-- Book Image -->
             <div class="book-image-section">
-                <img id="bookImage" src="" alt="Book Cover" class="book-cover" />
+                <img src="{{ $book->cover ? asset('storage/' . $book->cover) : 'https://via.placeholder.com/280x320?text=' . urlencode($book->title) }}" alt="{{ $book->title }}" class="book-cover" />
             </div>
 
             <!-- Book Info -->
             <div class="book-info-section">
-                <h1 id="bookTitle" class="book-title">Hujan</h1>
+                <h1 class="book-title">{{ $book->title }}</h1>
 
                 <div class="book-meta">
                     <div class="meta-item">
                         <span class="meta-label">Penulis</span>
-                        <span id="bookAuthor" class="meta-value">Tere Liye</span>
+                        <span class="meta-value">{{ $book->author ?? '-' }}</span>
                     </div>
-
                     <div class="meta-item">
                         <span class="meta-label">Penerbit</span>
-                        <span id="bookPublisher" class="meta-value">
-                            PT Gramedia Pustaka Utama
-                        </span>
+                        <span class="meta-value">{{ $book->publisher ?? '-' }}</span>
                     </div>
-
                     <div class="meta-item">
-                        <span class="meta-label">Halaman</span>
-                        <span id="bookPages" class="meta-value">456 Halaman</span>
+                        <span class="meta-label">Kategori</span>
+                        <span class="meta-value">{{ $book->category ?? '-' }}</span>
                     </div>
-
                     <div class="meta-item">
                         <span class="meta-label">Tahun Terbit</span>
-                        <span id="bookYear" class="meta-value">2025</span>
+                        <span class="meta-value">{{ $book->publication_year ?? '-' }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Stok</span>
+                        <span class="meta-value">{{ $book->stock }}</span>
                     </div>
                 </div>
 
                 <div class="book-description">
                     <h3>Deskripsi</h3>
-                    <p id="bookDescription">
-                        Blurb novel "Hujan" karya Tere Liye berkesan menarik (at poche
-                        yuktin point of rhose depar). Delun yang tenangnyo dengan
-                        menggunakan gayo bohoson gont! (agu bahasa, tokoh-tokoh yang petuh
-                        cinta peda'bab. kehidupannya di pengarangan. ruman bercecan.
-                        hingget alkhirnya leren merepa olat dini kembali ke owal
-                        cerita—darl darl iniloh, Laly remarahami bahwa teenangon menyimpan
-                        atau mempentahanconnya di tengos kilati dan gebal yang mendecat
-                        Bumi, di mana kout menjadi kunei pertocyanaan untuk manulia.
-                    </p>
+                    <p>{{ $book->description ?? 'Tidak ada deskripsi.' }}</p>
                 </div>
 
-                <button id="borrowBtn" class="borrow-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    456 Halaman
-                </button>
+                @if($book->stock > 0)
+                <form action="{{ route('student.loans.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="book_id" value="{{ $book->id }}">
+                    <button type="submit" class="borrow-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Pinjam Buku
+                    </button>
+                </form>
+                @else
+                <button class="borrow-btn bg-gray-400 cursor-not-allowed" disabled>Stok Habis</button>
+                @endif
             </div>
         </div>
     </main>

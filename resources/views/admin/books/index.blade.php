@@ -17,12 +17,11 @@
                         </a>
                     </div>
 
+
                     @if(session('success'))
-                        {{ session('success') }}
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Buku
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tahun
-                            Terbit</th>
+                        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
                     <div class="overflow-x-auto">

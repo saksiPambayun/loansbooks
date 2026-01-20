@@ -50,11 +50,14 @@
                             @forelse($student->loans as $loan)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                        {{ $loan->book->title }}</td>
+                                        {{ $loan->book->title }}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $loan->start_date->format('d M Y') }}</td>
+                                        {{ $loan->end_date ? $loan->end_date->format('d M Y') : '-' }}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $loan->end_date->format('d M Y') }}</td>
+                                        {{ $loan->end_date ? $loan->end_date->format('d M Y') : '-' }}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <span
                                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">

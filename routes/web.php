@@ -11,7 +11,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('index');
 
+
 Route::get('/katalog', [BookController::class, 'katalog'])->name('katalog');
+Route::get('/detail/{id}', [BookController::class, 'detail'])->name('detail');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
