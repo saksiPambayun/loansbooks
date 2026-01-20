@@ -33,18 +33,17 @@ class BookController extends Controller
 
     public function create()
     {
-        return view('books.create');
+        return view('admin.books.create');
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'author' => 'nullable|string|max:255',
-            'publisher' => 'nullable|string|max:255',
-            'publication_year' => 'nullable|integer|min:1900|max:' . (date('Y') + 1),
-            'isbn' => 'nullable|string|max:20',
-            'category' => 'nullable|string|max:100',
+            'author' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
+            'category' => 'required|string|max:100',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'stock' => 'required|integer|min:0',
             'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -58,15 +57,14 @@ class BookController extends Controller
             'title' => $validated['title'],
             'author' => $validated['author'],
             'publisher' => $validated['publisher'],
-            'publication_year' => $validated['publication_year'],
-            'isbn' => $validated['isbn'],
             'category' => $validated['category'],
+            'publication_year' => $validated['year'],
             'stock' => $validated['stock'],
             'cover' => $coverPath,
             'created_by' => Auth::id() ?? 0,
         ]);
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.books.index')
             ->with('success', 'Buku berhasil ditambahkan');
     }
 
@@ -76,7 +74,7 @@ class BookController extends Controller
             abort(404);
         }
         $book->load('loans.student.user');
-        return view('books.show', compact('book'));
+        return view('admin.books.show', compact('book'));
     }
 
     public function edit(Book $book)
@@ -84,7 +82,7 @@ class BookController extends Controller
         if ($book->deleted_at) {
             abort(404);
         }
-        return view('books.edit', compact('book'));
+        return view('admin.books.edit', compact('book'));
     }
 
     public function update(Request $request, Book $book)
@@ -114,14 +112,14 @@ class BookController extends Controller
             'author' => $validated['author'],
             'publisher' => $validated['publisher'],
             'publication_year' => $validated['publication_year'],
-            'isbn' => $validated['isbn'],
+            'isbn' => $validated['isbn'] ?? null,
             'category' => $validated['category'],
             'stock' => $validated['stock'],
             'cover' => $coverPath,
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.books.index')
             ->with('success', 'Buku berhasil diupdate');
     }
 
@@ -132,7 +130,7 @@ class BookController extends Controller
             'deleted_by' => Auth::id(),
         ]);
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.books.index')
             ->with('success', 'Buku berhasil dihapus');
     }
 }
