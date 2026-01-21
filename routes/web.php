@@ -42,6 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/status/overdue', [LoanController::class, 'checkOverdue'])->name('overdue');
         });
 
+        // Semua route admin/books sudah diamankan dengan middleware 'auth' dan 'role:Admin' di bawah ini:
+        // Jika user belum login, otomatis diarahkan ke halaman login
+        // Jika ingin menambah route lain yang harus login, tambahkan ke dalam group ini
         Route::resource('books', BookController::class)->names([
             'index' => 'books.index',
             'create' => 'books.create',
