@@ -128,12 +128,12 @@
                                     </td>
                                     <td>
                                         <span class="px-2 py-1 text-xs rounded-full
-                                                @if($loan->latestStatus?->status === 'approved') bg-green-100 text-green-700
-                                                @elseif($loan->latestStatus?->status === 'pending') bg-yellow-100 text-yellow-700
-                                                @elseif($loan->latestStatus?->status === 'late') bg-red-100 text-red-700
-                                                @else bg-gray-100 text-gray-700
-                                                @endif
-                                            ">
+                                                        @if($loan->latestStatus?->status === 'approved') bg-green-100 text-green-700
+                                                        @elseif($loan->latestStatus?->status === 'pending') bg-yellow-100 text-yellow-700
+                                                        @elseif($loan->latestStatus?->status === 'late') bg-red-100 text-red-700
+                                                        @else bg-gray-100 text-gray-700
+                                                        @endif
+                                                    ">
                                             {{ ucfirst($loan->latestStatus?->status ?? '-') }}
                                         </span>
                                     </td>

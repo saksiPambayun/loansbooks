@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }"
-    class="bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 h-screen sticky top-0 flex flex-col">
-    <!-- Mobile Header -->
+    class="bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 h-screen flex flex-col">
+
     <div
         class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 w-full fixed top-0 z-50">
         <div class="flex items-center">
@@ -19,11 +19,9 @@
         </button>
     </div>
 
-    <!-- Sidebar Content -->
     <div :class="{'translate-x-0': open, '-translate-x-full': !open}"
         class="fixed inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out z-40 w-64 bg-white dark:bg-gray-800 flex flex-col h-full border-r border-gray-100 dark:border-gray-700 pt-16 md:pt-0">
 
-        <!-- Logo (Desktop) -->
         <div class="hidden md:flex items-center px-6 py-6 border-b border-gray-100 dark:border-gray-700">
             <a href="" class="flex items-center space-x-3">
                 <x-application-logo class="block h-10 w-auto fill-current text-indigo-600" />
@@ -31,7 +29,6 @@
             </a>
         </div>
 
-        <!-- Navigation Links -->
         <div class="flex-1 overflow-y-auto pt-4 space-y-1">
             <div class="px-6 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Menu Utama
@@ -123,7 +120,7 @@
                                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
                             </path>
                         </svg>
-                        {{ __('Katalog Buku') }}
+                        {{ __('Katalog.Buku') }}
                     </div>
                 </x-responsive-nav-link>
 
