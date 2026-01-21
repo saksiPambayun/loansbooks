@@ -31,6 +31,33 @@ class BookController extends Controller
         return view('katalog', compact('books'));
     }
 
+  public function studentIndex(Request $request)
+{
+    $query = Book::whereNull('deleted_at');
+
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('title', 'like', '%' . $request->search . '%')
+              ->orWhere('author', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    if ($request->filled('category') && $request->category !== 'Semua') {
+        $query->where('category', $request->category);
+    }
+
+    $books = $query->paginate(12);
+
+    return view('student.books.index', compact('books'));
+}
+
+public function studentShow($id)
+{
+    $book = Book::whereNull('deleted_at')->findOrFail($id);
+
+    return view('student.books.detail', compact('book'));
+}
+
     public function create()
     {
         return view('admin.books.create');

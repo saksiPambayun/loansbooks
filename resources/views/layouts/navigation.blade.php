@@ -4,7 +4,7 @@
     <div
         class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 w-full fixed top-0 z-50">
         <div class="flex items-center">
-            <a href="{{ route('dashboard') }}">
+            <a href="">
                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
             </a>
         </div>
@@ -25,7 +25,7 @@
 
         <!-- Logo (Desktop) -->
         <div class="hidden md:flex items-center px-6 py-6 border-b border-gray-100 dark:border-gray-700">
-            <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
+            <a href="" class="flex items-center space-x-3">
                 <x-application-logo class="block h-10 w-auto fill-current text-indigo-600" />
                 <span class="text-xl font-bold text-gray-800 dark:text-white">{{ config('app.name') }}</span>
             </a>
@@ -115,11 +115,13 @@
                     </div>
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('katalog')" :active="request()->routeIs('katalog')">
+                <x-responsive-nav-link :href="route('student.books.index')" :active="request()->routeIs('student.books.*')">
+
                     <div class="flex items-center">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
                         </svg>
                         {{ __('Katalog Buku') }}
                     </div>

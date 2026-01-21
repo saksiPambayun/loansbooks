@@ -27,9 +27,9 @@ class Loan extends Model
 
     // Relationships
     public function student()
-    {
-        return $this->belongsTo(Student::class, 'student_id');
-    }
+{
+    return $this->belongsTo(Student::class, 'student_id');
+}
 
     public function book()
     {
@@ -45,4 +45,5 @@ class Loan extends Model
     {
         return $this->hasOne(LoanStatus::class, 'loan_id')->latestOfMany();
     }
+    
 }

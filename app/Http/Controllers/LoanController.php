@@ -91,7 +91,8 @@ class LoanController extends Controller
     {
         $validated = $request->validate([
             'book_id' => 'required|exists:books,id',
-            'duration' => 'required|integer|min:1|max:14', // Max 14 hari
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after:start_date',
         ]);
 
         $student = Auth::user()->student;
@@ -106,14 +107,11 @@ class LoanController extends Controller
                 return back()->with('error', 'Stok buku tidak tersedia');
             }
 
-            $start_date = Carbon::today();
-            $end_date = Carbon::today()->addDays($validated['duration']);
-
             $loan = Loan::create([
                 'student_id' => $student->id,
                 'book_id' => $validated['book_id'],
-                'start_date' => $start_date,
-                'end_date' => $end_date,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
                 'created_by' => Auth::id(),
             ]);
 

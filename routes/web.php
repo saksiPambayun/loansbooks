@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ClassroomController;
@@ -16,17 +17,11 @@ Route::get('/katalog', [BookController::class, 'katalog'])->name('katalog');
 Route::get('/detail/{id}', [BookController::class, 'detail'])->name('detail');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        if (auth()->guard('web')->user()->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        }
-        return redirect()->route('student.dashboard');
-    })->name('dashboard');
-
+    
     Route::middleware(['role:Admin'])->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard'); // You can create a specific admin dashboard view later
-        })->name('dashboard');
+      Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])
+        ->name('dashboard');
+
 
         Route::resource('students', StudentController::class)->names('students');
         Route::resource('classrooms', ClassroomController::class)->names('classrooms');
@@ -42,9 +37,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/status/overdue', [LoanController::class, 'checkOverdue'])->name('overdue');
         });
 
-        // Semua route admin/books sudah diamankan dengan middleware 'auth' dan 'role:Admin' di bawah ini:
-        // Jika user belum login, otomatis diarahkan ke halaman login
-        // Jika ingin menambah route lain yang harus login, tambahkan ke dalam group ini
         Route::resource('books', BookController::class)->names([
             'index' => 'books.index',
             'create' => 'books.create',
@@ -56,16 +48,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     });
 
-    Route::middleware(['role:Student'])->prefix('student')->name('student.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
+    Route::middleware(['role:Student'])->prefix('student')->group(function () {
 
-        Route::prefix('loans')->name('loans.')->group(function () {
-            Route::get('/', [LoanController::class, 'studentIndex'])->name('index');
-            Route::post('/store', [LoanController::class, 'studentStore'])->name('store');
+     Route::get('/dashboard', [DashboardController::class, 'studentDashboard'])->name('student.dashboard');
+
+        Route::prefix('books')->name('student.books.')->group(function () {
+            Route::get('/', [BookController::class, 'studentIndex'])->name('index');
+            Route::get('/{id}', [BookController::class, 'studentShow'])->name('show');
+        });
+
+
+        Route::prefix('loans')->group(function () {
+            Route::get('/', [LoanController::class, 'studentIndex'])->name('student.loans.index');
+            Route::post('/store', [LoanController::class, 'studentStore'])->name('student.loans.store');
         });
     });
+
 });
 
 Route::middleware('auth')->group(function () {
